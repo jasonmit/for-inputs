@@ -1,6 +1,9 @@
 # For-inputs
 
-This README outlines the details of collaborating on this Ember addon.
+Given a string, inputs are rendered for each character.  Make to handle arrow keys, tabbing, and retaining the width of the string.
+
+![SS](http://i.imgur.com/8VrS7Y7.png)
+
 
 ## Installation
 
