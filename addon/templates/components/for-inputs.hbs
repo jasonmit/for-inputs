@@ -1,0 +1,3 @@
+{{#each _inputs key="@index" as |input index|}}
+  <input autofocus={{autofocus}} type="text" class="for-inputs--input" onfocus={{action 'focus-all'}} onchange={{action 'update-at' index}} onkeyup={{action 'key-up' index}} maxlength="1" value={{input}}>
+{{/each}}

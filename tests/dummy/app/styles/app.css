@@ -1,0 +1,19 @@
+input[type='text'] {
+  padding: 8px;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  border-color: #ececec;
+  border-top-width: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 1px;
+}
+
+code {
+  background: #f0f9f7;
+  border-bottom: #888 solid 1px;
+  padding: 16px;
+  margin: 8px 0;
+  display: block;
+}
