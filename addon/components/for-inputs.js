@@ -2,10 +2,6 @@ import Ember from 'ember';
 import layout from '../templates/components/for-inputs';
 
 const { set, run, get, computed } = Ember;
-const BACKSPACE = 8;
-const DELETE = 46;
-const LEFT = 37;
-const RIGHT = 39;
 
 const ForInputsComponent = Ember.Component.extend({
   layout,
@@ -24,13 +20,17 @@ const ForInputsComponent = Ember.Component.extend({
     return target.substring(0, idx) + replacement + target.substring(idx + 1);
   },
 
+  inputAt(idx) {
+    return this.$('input').eq(idx);
+  },
+
   focusAt(idx) {
     let input = get(this, 'input');
-    let $el = this.$('input')[idx];
+    let $target = this.inputAt(idx);
 
     if (idx < input.length) {
-      $el.focus();
-      $el.select();
+      $target.focus();
+      $target.select();
     }
   },
 
@@ -41,12 +41,12 @@ const ForInputsComponent = Ember.Component.extend({
 
     'key-up'(idx, evt) {
       let value = evt.target.value;
-      let $target = this.$('input').eq(idx);
+      let $target = this.inputAt(idx);
 
-      if (evt.keyCode === LEFT) {
+      if (evt.keyCode === 37 /* left arrow */) {
         $target.prev().focus();
       }
-      else if (evt.keyCode === RIGHT) {
+      else if (evt.keyCode ===  39 /* right arrow */) {
         $target.next().focus();
       }
       else if (value.length && evt.key.length === 1) {
@@ -75,7 +75,9 @@ const ForInputsComponent = Ember.Component.extend({
       set(this, 'input', output);
 
       // focus on the next input if it's empty
-      !was_delete && run.scheduleOnce('afterRender', this, 'focusAt', ++idx);
+      if (!was_delete) {
+        run.scheduleOnce('afterRender', this, 'focusAt', ++idx);
+      }
     }
   }
 });
