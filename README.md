@@ -1,6 +1,6 @@
 # For-inputs
 
-Given a string, inputs are rendered for each character.  Made to handle arrow keys, tabbing, and retaining the width of the string.
+Given a string, inputs are rendered for each character.  Made to handle arrow keys, tabbing, and retaining the width of the string and (optional) one-way databinding.
 
 ![SS](http://i.imgur.com/8VrS7Y7.png)
 
