@@ -4,6 +4,7 @@ import layout from '../templates/components/for-inputs';
 const { set, run, get, computed } = Ember;
 
 const ForInputsComponent = Ember.Component.extend({
+  classNames: ['for-input'],
   layout,
 
   input: '',
