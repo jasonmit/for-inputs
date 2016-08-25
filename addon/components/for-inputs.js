@@ -8,35 +8,43 @@ const ForInputsComponent = Ember.Component.extend({
   layout,
 
   input: '',
+  length: null,
 
   _inputs: computed('input', {
     get() {
       let input = get(this, 'input') + '';
+      let output = input.split('').map((c) => c !== ' ' ? c : '');
+      let length = get(this, 'length');
 
-      return input.split('').map((c) => c !== ' ' ? c : '');
+      if (typeof length === 'number' && output.length < length) {
+        let padding = new Array(length - output.length);
+
+        for (var i=0;i<padding.length;i++) {
+          padding[i] = '';
+        }
+
+        output = output.concat(padding);
+      }
+
+      return output;
     }
   }).readOnly(),
 
-  replaceCharAt(target, replacement, idx) {
-    return target.substring(0, idx) + replacement + target.substring(idx + 1);
-  },
-
   inputAt(idx) {
-    return this.$('input').eq(idx);
+    return this.$('input[type="text"]').eq(idx);
   },
 
   focusAt(idx) {
-    let input = get(this, 'input');
     let $target = this.inputAt(idx);
+    let len = get(this, 'length') || get(this, 'input.length');
 
-    if (idx < input.length) {
-      $target.focus();
+    if (idx < len) {
       $target.select();
     }
   },
 
   actions: {
-    'focus-all'(evt) {
+    'select-text'(evt) {
       evt.target.select();
     },
 
@@ -55,10 +63,9 @@ const ForInputsComponent = Ember.Component.extend({
       }
     },
 
-    'update-at'(idx, evt) {
-      evt.preventDefault();
-
-      let input = get(this, 'input');
+    'handle-on-change'(idx, evt) {
+      let input = get(this, '_inputs');
+      let len = input.length;
       let replacement = evt.target.value;
       let was_delete = false;
 
@@ -67,17 +74,23 @@ const ForInputsComponent = Ember.Component.extend({
         replacement = ' ';
       }
 
-      let output = this.replaceCharAt(input, replacement, idx);
+      input[idx] = replacement;
 
-      if (typeof this.attrs['on-change'] === 'function') {
-        return this.attrs['on-change'](idx, output);
+      let out = '';
+
+      for (let i=0;i<len;i++) {
+        let char = input[i];
+        out += char === '' ? ' ':  char;
       }
 
-      set(this, 'input', output);
+      if (this.attrs['on-change']) {
+        this.attrs['on-change'](out);
+      }
 
-      // focus on the next input if it's empty
+      set(this, 'input', out);
+
       if (!was_delete) {
-        run.scheduleOnce('afterRender', this, 'focusAt', ++idx);
+        run.scheduleOnce('render', this, 'focusAt', ++idx);
       }
     }
   }
